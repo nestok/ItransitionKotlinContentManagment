@@ -1,8 +1,8 @@
 package com.funproject.developer.funproject.security.service
 
+import com.funproject.developer.funproject.model.exception.UserNotFoundException
 import com.funproject.developer.funproject.repository.UserRepository
 import com.funproject.developer.funproject.security.model.JwtUserDetails
-import com.funproject.developer.funproject.service.JsonException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -21,6 +21,6 @@ class JwtUserDetailsServiceImpl @Autowired constructor(
 
         return Optional.ofNullable<Any>(byUsername)
                 .map({ JwtUserDetails(byUsername!!) })
-                .orElseThrow({ JsonException("User not found.") })
+                .orElseThrow({ UserNotFoundException("User " + username + " not found.")  })
     }
 }

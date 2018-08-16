@@ -1,6 +1,6 @@
 databaseChangeLog:
 - changeSet:
-    id: 1
+    id: create_user_table
     author: yury
     changes:
     - createTable:
@@ -29,17 +29,94 @@ databaseChangeLog:
             constraints:
               nullable: false
         - column:
+            name: firstname
+            type: varchar(255)
+            constraints:
+              nullable: false
+        - column:
+            name: lastname
+            type: varchar(255)
+            constraints:
+              nullable: false
+        - column:
             name: is_deleted
             type: boolean
             constraints:
-                nullable: false
+              nullable: false
         - column:
             name: role
             type: varchar(255)
             constraints:
               nullable: false
 - changeSet:
-    id: 4
+    id: create_status_reply_table
+    author: yury
+    changes:
+    - createTable:
+        tableName: status_reply
+        columns:
+        - column:
+            name: id
+            type: int
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              nullable: false
+        - column:
+            name: comment
+            type: varchar(255)
+            constraints:
+              nullable: false
+        - column:
+            name: publish_date
+            type: timestamp
+            constraints:
+              nullable: false
+- changeSet:
+    id: create_mood_table
+    author: yury
+    changes:
+    - createTable:
+        tableName: mood
+        columns:
+        - column:
+            name: id
+            type: int
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              nullable: false
+        - column:
+            name: icon
+            type: varchar(255)
+            constraints:
+              nullable: false
+        - column:
+            name: text
+            type: varchar(255)
+            constraints:
+              nullable: false
+- changeSet:
+    id: create_location_table
+    author: yury
+    changes:
+    - createTable:
+          tableName: location
+          columns:
+          - column:
+                name: id
+                type: int
+                autoIncrement: true
+                constraints:
+                    primaryKey: true
+                    nullable: false
+          - column:
+                name: name
+                type: varchar(255)
+                constraints:
+                    nullable: false
+- changeSet:
+    id: insert_initial_data_in_user_table
     author: yury
     changes:
     - insert:
@@ -54,6 +131,12 @@ databaseChangeLog:
         - column:
             name: email
             value: blabla@mail.ru
+        - column:
+            name: firstname
+            value: Vasya
+        - column:
+            name: lastname
+            value: Pupkin
         - column:
             name: is_deleted
             value: false
@@ -73,6 +156,12 @@ databaseChangeLog:
             name: email
             value: blabla1@mail.ru
         - column:
+            name: firstname
+            value: Vasya
+        - column:
+            name: lastname
+            value: Pupkin
+        - column:
             name: is_deleted
             value: false
         - column:
@@ -90,6 +179,12 @@ databaseChangeLog:
         - column:
             name: email
             value: blabla2@mail.ru
+        - column:
+            name: firstname
+            value: Vasya
+        - column:
+            name: lastname
+            value: Pupkin
         - column:
             name: is_deleted
             value: false
@@ -109,6 +204,12 @@ databaseChangeLog:
             name: email
             value: blabla3@mail.ru
         - column:
+            name: firstname
+            value: Vasya
+        - column:
+            name: lastname
+            value: Pupkin
+        - column:
             name: is_deleted
             value: false
         - column:
@@ -127,6 +228,12 @@ databaseChangeLog:
             name: email
             value: blabla4@mail.ru
         - column:
+            name: firstname
+            value: Vasya
+        - column:
+            name: lastname
+            value: Pupkin
+        - column:
             name: is_deleted
             value: false
         - column:
@@ -136,17 +243,52 @@ databaseChangeLog:
         tableName: person
         columns:
         - column:
-              name: username
-              value: Admin
+            name: username
+            value: Admin
         - column:
-              name: password
-              value: $2a$10$r4gQSKxAYB/hiy5bYo9QtuxMCXVaX.Glg.5UvU7RM7xkdUkM0DUCi
+            name: password
+            value: $2a$10$r4gQSKxAYB/hiy5bYo9QtuxMCXVaX.Glg.5UvU7RM7xkdUkM0DUCi
         - column:
-              name: email
-              value: sych_y@mail.ru
+            name: email
+            value: sych_y@mail.ru
         - column:
-              name: is_deleted
-              value: false
+            name: firstname
+            value: Vasya
         - column:
-              name: role
-              value: ROLE_ADMIN
+            name: lastname
+            value: Pupkin
+        - column:
+            name: is_deleted
+            value: false
+        - column:
+            name: role
+            value: ROLE_ADMIN
+
+#- changeSet:
+#    id: insert_initial_data_in_mood_table
+#    author: yury
+#    changes:
+#    - insert:
+#          tableName: person
+#          columns:
+#          - column:
+#                name: username
+#                value: Jack
+#          - column:
+#                name: password
+#                value: $2a$10$6kjSEhse7DJ5FT/uJQB.5uDMIyO9dTLc3k5ancHJINlYT4cwNX.aG
+#          - column:
+#                name: email
+#                value: blabla@mail.ru
+#          - column:
+#                name: firstname
+#                value: Vasya
+#          - column:
+#                name: lastname
+#                value: Pupkin
+#          - column:
+#                name: is_deleted
+#                value: false
+#          - column:
+#                name: role
+#                value: ROLE_USER

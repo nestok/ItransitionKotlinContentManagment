@@ -1,38 +1,33 @@
 package com.funproject.developer.funproject.controller
 
 import com.funproject.developer.funproject.model.exception.*
-import com.funproject.developer.funproject.model.exception.ErrorResponseEntity.Companion.notFound
-import org.springframework.context.MessageSource
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
-import java.util.*
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.web.bind.annotation.ResponseStatus
 
 
 @RestControllerAdvice
-class ExceptionController(var messageSource: MessageSource) {
+class ExceptionController {
 
-    @ExceptionHandler(DataNotFoundException::class)
-    fun resourceNotFoundException(exception: DataNotFoundException, locale: Locale) =
-            notFound(messageSource.getMessage(exception, locale))
-
-    @ExceptionHandler(UsernameNotUniqueException::class)
-    fun handleUsernameNotUniqueException(ex: UsernameNotUniqueException): ResponseMessage {
-        return ResponseMessage(ex.message!!)
-    }
-
-    @ExceptionHandler(EmailNotUniqueException::class)
-    fun handleEmailNotUniqueException(ex: EmailNotUniqueException): ResponseMessage {
-        return ResponseMessage(ex.message!!)
+    @ExceptionHandler(BadCredentialsException::class)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    fun handleBadCredentialsException(ex: BadCredentialsException): ResponseEntity<String> {
+        return ResponseEntity(ex.message, HttpStatus.NOT_ACCEPTABLE)
     }
 
     @ExceptionHandler(UserNotFoundException::class)
-    fun handleUserNotFoundException(ex: UserNotFoundException): ResponseMessage {
-        return ResponseMessage(ex.message!!)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleUserNotFoundException(ex: UserNotFoundException): ResponseEntity<String> {
+        return ResponseEntity(ex.message, HttpStatus.NOT_FOUND)
     }
 
-    @ExceptionHandler(AdminDeleteAttemptException::class)
-    fun handleAdminDeleteAttemptException(ex: AdminDeleteAttemptException): ResponseMessage {
-        return ResponseMessage(ex.message!!)
+    @ExceptionHandler(EntityNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleEntityNotFoundException(ex: EntityNotFoundException): ResponseEntity<String> {
+        return ResponseEntity(ex.message, HttpStatus.NOT_FOUND)
     }
 
 }

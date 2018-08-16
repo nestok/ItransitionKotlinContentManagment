@@ -4,9 +4,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class FunprojectApplication
+class PortalContentManagmentApplication
 
 fun main(args: Array<String>) {
-    runApplication<FunprojectApplication>(*args)
+    runApplication<PortalContentManagmentApplication>(*args)
 }
 

@@ -11,6 +11,10 @@ data class User(
 
     val email: String = "",
 
+    val firstname: String = "",
+
+    val lastname: String = "",
+    
     var is_deleted: Boolean = false,
 
     @Enumerated(EnumType.STRING)
