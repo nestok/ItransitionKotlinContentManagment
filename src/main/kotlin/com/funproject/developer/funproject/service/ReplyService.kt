@@ -60,6 +60,12 @@ class ReplyService @Autowired constructor(
         locationRepository.save(location)
     }
 
+    fun deleteReply(id: Long) {
+        val deletedReply: StatusReply = statusReplyRepository.findById(id).orElse(null)
+                ?: throw EntityNotFoundException("Reply not found")
+        statusReplyRepository.delete(deletedReply)
+    }
+
     fun deleteLocation(id: Long) {
         val deletedLocation: Location = locationRepository.findById(id).orElse(null)
                 ?: throw EntityNotFoundException("Location not found")

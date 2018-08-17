@@ -7,29 +7,39 @@ import com.funproject.developer.funproject.model.StatusReply
 import org.springframework.beans.factory.annotation.Autowired
 import com.funproject.developer.funproject.service.ReplyService
 import org.springframework.http.HttpStatus
+import org.springframework.messaging.handler.annotation.MessageMapping
+import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @CrossOrigin(origins = arrayOf("http://localhost:4200"), maxAge = 3600)
 @RequestMapping(value = "/reply")
-class StatusReplyController {
+class StatusReplyController @Autowired constructor(
+        private var template: SimpMessagingTemplate,
+        private var replyService: ReplyService
+) {
 
     @Autowired
-    lateinit var replyService: ReplyService
+    fun StatusReplyController(template: SimpMessagingTemplate) {
+        this.template = template
+    }
+
+//    @Autowired
+//    lateinit var replyService: ReplyService
 
     @GetMapping("/getAll")
-    fun findAllReplies(): ArrayList<StatusReply>{
+    fun findAllReplies(): ArrayList<StatusReply> {
         return replyService.findAllReplies()
     }
 
     @GetMapping("/getMoods")
-    fun findAllMoods(): ArrayList<Mood>{
+    fun findAllMoods(): ArrayList<Mood> {
         return replyService.findAllMoods()
     }
 
     @GetMapping("/getLocations")
-    fun findAllLocations(): ArrayList<Location>{
+    fun findAllLocations(): ArrayList<Location> {
         return replyService.findAllLocations()
     }
 
@@ -78,6 +88,17 @@ class StatusReplyController {
     @DeleteMapping("/deleteLocation/{id}")
     fun deleteLocation(@PathVariable(value = "id") id: Long) {
         replyService.deleteLocation(id)
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/deleteReply/{id}")
+    fun deleteReply(@PathVariable(value = "id") id: Long) {
+        replyService.deleteReply(id)
+    }
+
+    @MessageMapping("/send/reply")
+    fun onRecievedReply() {
+        this.template.convertAndSend("/reply", "OK")
     }
 
 }
