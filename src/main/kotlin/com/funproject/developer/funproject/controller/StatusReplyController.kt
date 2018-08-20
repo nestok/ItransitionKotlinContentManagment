@@ -25,12 +25,16 @@ class StatusReplyController @Autowired constructor(
         this.template = template
     }
 
-//    @Autowired
-//    lateinit var replyService: ReplyService
-
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @GetMapping("/getAll")
     fun findAllReplies(): ArrayList<StatusReply> {
         return replyService.findAllReplies()
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @GetMapping("/getTeamStatuses")
+    fun findTeamStatuses(): ArrayList<StatusReply> {
+        return replyService.findTeamStatuses()
     }
 
     @GetMapping("/getMoods")

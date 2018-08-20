@@ -13,5 +13,5 @@ interface UserRepository : JpaRepository<User, Long> {
     fun findByEmail(email: String): User?
 
     @Query("SELECT u FROM User u WHERE u.is_deleted = false")
-    fun findAllExisted(): Iterable<User>
+    fun findAllExisted(): ArrayList<User>
 }

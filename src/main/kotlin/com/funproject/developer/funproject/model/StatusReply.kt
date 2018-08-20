@@ -13,7 +13,6 @@ data class StatusReply(
 
         val comment: String = "",
 
-//        @JsonFormat(pattern = "YYYY-MM-dd HH:mm")
         val publish_date: LocalDateTime = LocalDateTime.now(),
 
         @ManyToOne(fetch = FetchType.EAGER)
@@ -30,8 +29,6 @@ data class StatusReply(
 
         @Id @GeneratedValue(strategy = GenerationType.AUTO)
         val id: Long = -1) {
-
-        //.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
 
 //    override fun toString(): String {
 //        return "{location: ${this.location}, mood: ${this.mood}, comment: ${this.comment}," +

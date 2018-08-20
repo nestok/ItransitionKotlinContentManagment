@@ -8,9 +8,11 @@ import com.funproject.developer.funproject.model.exception.UserNotFoundException
 import com.funproject.developer.funproject.repository.LocationRepository
 import com.funproject.developer.funproject.repository.MoodRepository
 import com.funproject.developer.funproject.repository.StatusReplyRepository
+import com.funproject.developer.funproject.security.service.AuthenticationHelper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.lang.UnsupportedOperationException
 
 @Service
 @Transactional
@@ -18,11 +20,22 @@ class ReplyService @Autowired constructor(
         private val statusReplyRepository: StatusReplyRepository,
         private val moodRepository: MoodRepository,
         private val locationRepository: LocationRepository,
-        private val replyAddTransformer: ReplyAddTransformer
+        private val replyAddTransformer: ReplyAddTransformer,
+        private val authenticationHelper: AuthenticationHelper
 ) {
 
     fun findAllReplies(): ArrayList<StatusReply> {
-        return statusReplyRepository!!.findAll()
+        val currentUser = authenticationHelper.getCurrentUser() ?: throw UserNotFoundException("User not found")
+        if (currentUser.role == UserRole.ROLE_USER)
+            return statusReplyRepository.findAllNotPersonal(currentUser.id)
+        return statusReplyRepository.findAll()
+    }
+
+    fun findTeamStatuses(): ArrayList<StatusReply> {
+//        val currentUser = authenticationHelper.getCurrentUser() ?: throw UserNotFoundException("User not found")
+//        if (currentUser.role == UserRole.ROLE_USER)
+//            return statusReplyRepository.findAllNotPersonal(currentUser.id)
+        return statusReplyRepository.findTeamStatuses()
     }
 
     fun findAllMoods(): ArrayList<Mood> {
@@ -34,6 +47,9 @@ class ReplyService @Autowired constructor(
     }
 
     fun addReply(replyAddDto: ReplyAddDto) {
+        val currentUser = authenticationHelper.getCurrentUser() ?: throw UserNotFoundException("User not found")
+        if (currentUser.id == replyAddDto.contributor_id)
+            throw UnsupportedOperationException("User can't write replies on himself")
         val reply: StatusReply = replyAddTransformer.makeModel(replyAddDto)
         statusReplyRepository.save(reply)
     }

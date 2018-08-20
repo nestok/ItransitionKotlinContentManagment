@@ -2,14 +2,20 @@ package com.funproject.developer.funproject.security.service
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.funproject.developer.funproject.model.User
+import com.funproject.developer.funproject.model.exception.AuthenticationFailedException
+import com.funproject.developer.funproject.repository.UserRepository
 import com.funproject.developer.funproject.security.exception.InvalidTokenAuthenticationException
 import com.funproject.developer.funproject.security.model.TokenPayload
 import lombok.RequiredArgsConstructor
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.InternalAuthenticationServiceException
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.jwt.JwtHelper
 import org.springframework.security.jwt.crypto.sign.MacSigner
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import java.io.IOException
 import java.time.Instant
 import java.util.*
@@ -17,7 +23,8 @@ import java.util.*
 @Component
 @RequiredArgsConstructor
 class AuthenticationHelper @Autowired constructor(
-        private val objectMapper: ObjectMapper
+        private val objectMapper: ObjectMapper,
+        private val userRepository: UserRepository
 ) {
     private val SECRET = "ChangeMeToSomethingElse"
 
@@ -62,6 +69,21 @@ class AuthenticationHelper @Autowired constructor(
         }
 
         return tokenPayload
+    }
+
+    @Transactional(readOnly = true)
+    fun getCurrentUser(): User? {
+        val authentication = getAuthenticationWithCheck()
+        return userRepository.findByUsername(authentication.name) ?: return null
+    }
+
+    fun getAuthenticationWithCheck(): Authentication {
+        val authentication = SecurityContextHolder.getContext().authentication
+        val checkAuthenticationExists = authentication != null && authentication.isAuthenticated
+        if (checkAuthenticationExists) {
+            return authentication
+        }
+        throw AuthenticationFailedException("Authentication failed.")
     }
 
     companion object {
