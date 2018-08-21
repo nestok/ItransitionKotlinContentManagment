@@ -1,5 +1,7 @@
 package com.funproject.developer.funproject.service
 
+import com.funproject.developer.funproject.client.UserManagementClient
+import com.funproject.developer.funproject.dto.replyDto.ContributorReplyDto
 import com.funproject.developer.funproject.dto.replyDto.ReplyAddDto
 import com.funproject.developer.funproject.dto.transformer.ReplyAddTransformer
 import com.funproject.developer.funproject.model.*
@@ -21,7 +23,8 @@ class ReplyService @Autowired constructor(
         private val moodRepository: MoodRepository,
         private val locationRepository: LocationRepository,
         private val replyAddTransformer: ReplyAddTransformer,
-        private val authenticationHelper: AuthenticationHelper
+        private val authenticationHelper: AuthenticationHelper,
+        private val userManagementClient: UserManagementClient
 ) {
 
     fun findAllReplies(): ArrayList<StatusReply> {
@@ -32,9 +35,11 @@ class ReplyService @Autowired constructor(
     }
 
     fun findTeamStatuses(): ArrayList<StatusReply> {
-//        val currentUser = authenticationHelper.getCurrentUser() ?: throw UserNotFoundException("User not found")
-//        if (currentUser.role == UserRole.ROLE_USER)
-//            return statusReplyRepository.findAllNotPersonal(currentUser.id)
+        val contributors = userManagementClient.findAllContributors()
+        val teamStatusList = ArrayList<ContributorReplyDto>()
+        for (contributor in contributors){
+//            teamStatusList.add()
+        }
         return statusReplyRepository.findTeamStatuses()
     }
 
