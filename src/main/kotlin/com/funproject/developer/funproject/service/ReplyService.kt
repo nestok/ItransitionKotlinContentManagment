@@ -3,6 +3,7 @@ package com.funproject.developer.funproject.service
 import com.funproject.developer.funproject.client.UserManagementClient
 import com.funproject.developer.funproject.dto.replyDto.ContributorReplyDto
 import com.funproject.developer.funproject.dto.replyDto.ReplyAddDto
+import com.funproject.developer.funproject.dto.transformer.ContributorReplyTransformer
 import com.funproject.developer.funproject.dto.transformer.ReplyAddTransformer
 import com.funproject.developer.funproject.model.*
 import com.funproject.developer.funproject.model.exception.EntityNotFoundException
@@ -10,11 +11,13 @@ import com.funproject.developer.funproject.model.exception.UserNotFoundException
 import com.funproject.developer.funproject.repository.LocationRepository
 import com.funproject.developer.funproject.repository.MoodRepository
 import com.funproject.developer.funproject.repository.StatusReplyRepository
+import com.funproject.developer.funproject.repository.dtoDao.ContributorDtoAccess
 import com.funproject.developer.funproject.security.service.AuthenticationHelper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.lang.UnsupportedOperationException
+
 
 @Service
 @Transactional
@@ -24,23 +27,28 @@ class ReplyService @Autowired constructor(
         private val locationRepository: LocationRepository,
         private val replyAddTransformer: ReplyAddTransformer,
         private val authenticationHelper: AuthenticationHelper,
-        private val userManagementClient: UserManagementClient
+        private val userManagementClient: UserManagementClient,
+        private val contributorReplyTransformer: ContributorReplyTransformer,
+        private val contributorDtoAccess: ContributorDtoAccess
 ) {
 
-    fun findAllReplies(): ArrayList<StatusReply> {
+    fun findAllReplies(): ArrayList<ContributorReplyDto> {
         val currentUser = authenticationHelper.getCurrentUser() ?: throw UserNotFoundException("User not found")
         if (currentUser.role == UserRole.ROLE_USER)
-            return statusReplyRepository.findAllNotPersonal(currentUser.id)
-        return statusReplyRepository.findAll()
+            return contributorDtoAccess.findAllNotPersonal(currentUser.id)
+        return contributorReplyTransformer.makeDto(statusReplyRepository.findAll())
     }
 
-    fun findTeamStatuses(): ArrayList<StatusReply> {
+    fun findTeamStatuses(): ArrayList<ContributorReplyDto> {
         val contributors = userManagementClient.findAllContributors()
-        val teamStatusList = ArrayList<ContributorReplyDto>()
-        for (contributor in contributors){
-//            teamStatusList.add()
-        }
-        return statusReplyRepository.findTeamStatuses()
+        val teamStatusList = contributorDtoAccess.findLastContributorReply()
+//        val contributorsWithoutReply = contributorDtoAccess.findContributorWithoutReply()
+//        for (contributor in contributorsWithoutReply){
+//            teamStatusList.add(ContributorReplyDto(
+//                    contributor = contributor,
+//                    reply = null))
+//        }
+        return teamStatusList
     }
 
     fun findAllMoods(): ArrayList<Mood> {
