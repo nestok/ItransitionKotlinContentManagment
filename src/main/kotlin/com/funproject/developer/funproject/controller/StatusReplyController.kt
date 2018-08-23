@@ -2,6 +2,7 @@ package com.funproject.developer.funproject.controller
 
 import com.funproject.developer.funproject.dto.replyDto.ContributorReplyDto
 import com.funproject.developer.funproject.dto.replyDto.ReplyAddDto
+import com.funproject.developer.funproject.dto.userDto.ContributorDto
 import com.funproject.developer.funproject.model.Location
 import com.funproject.developer.funproject.model.Mood
 import com.funproject.developer.funproject.model.StatusReply
@@ -41,6 +42,11 @@ class StatusReplyController @Autowired constructor(
     @GetMapping("/getMoods")
     fun findAllMoods(): ArrayList<Mood> {
         return replyService.findAllMoods()
+    }
+
+    @GetMapping("/getContributorsWithoutReply")
+    fun findContributorsWithoutReply(): ArrayList<ContributorDto> {
+        return replyService.findContributorsWithoutReply()
     }
 
     @GetMapping("/getLocations")

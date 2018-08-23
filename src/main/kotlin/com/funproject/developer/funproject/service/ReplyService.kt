@@ -5,6 +5,7 @@ import com.funproject.developer.funproject.dto.replyDto.ContributorReplyDto
 import com.funproject.developer.funproject.dto.replyDto.ReplyAddDto
 import com.funproject.developer.funproject.dto.transformer.ContributorReplyTransformer
 import com.funproject.developer.funproject.dto.transformer.ReplyAddTransformer
+import com.funproject.developer.funproject.dto.userDto.ContributorDto
 import com.funproject.developer.funproject.model.*
 import com.funproject.developer.funproject.model.exception.EntityNotFoundException
 import com.funproject.developer.funproject.model.exception.UserNotFoundException
@@ -35,20 +36,17 @@ class ReplyService @Autowired constructor(
     fun findAllReplies(): ArrayList<ContributorReplyDto> {
         val currentUser = authenticationHelper.getCurrentUser() ?: throw UserNotFoundException("User not found")
         if (currentUser.role == UserRole.ROLE_USER)
-            return contributorDtoAccess.findAllNotPersonal(currentUser.id)
+            return contributorDtoAccess.findAllNotPersonalCriteria(currentUser.id)
         return contributorReplyTransformer.makeDto(statusReplyRepository.findAll())
     }
 
     fun findTeamStatuses(): ArrayList<ContributorReplyDto> {
+        return contributorDtoAccess.findLastContributorReply()
+    }
+
+    fun findContributorsWithoutReply(): ArrayList<ContributorDto> {
         val contributors = userManagementClient.findAllContributors()
-        val teamStatusList = contributorDtoAccess.findLastContributorReply()
-//        val contributorsWithoutReply = contributorDtoAccess.findContributorWithoutReply()
-//        for (contributor in contributorsWithoutReply){
-//            teamStatusList.add(ContributorReplyDto(
-//                    contributor = contributor,
-//                    reply = null))
-//        }
-        return teamStatusList
+        return contributorDtoAccess.findContributorWithoutReply()
     }
 
     fun findAllMoods(): ArrayList<Mood> {

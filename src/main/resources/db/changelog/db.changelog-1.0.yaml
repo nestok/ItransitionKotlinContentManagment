@@ -264,31 +264,42 @@ databaseChangeLog:
             name: role
             value: ROLE_ADMIN
 
-#- changeSet:
-#    id: insert_initial_data_in_mood_table
-#    author: yury
-#    changes:
-#    - insert:
-#          tableName: person
-#          columns:
-#          - column:
-#                name: username
-#                value: Jack
-#          - column:
-#                name: password
-#                value: $2a$10$6kjSEhse7DJ5FT/uJQB.5uDMIyO9dTLc3k5ancHJINlYT4cwNX.aG
-#          - column:
-#                name: email
-#                value: blabla@mail.ru
-#          - column:
-#                name: firstname
-#                value: Vasya
-#          - column:
-#                name: lastname
-#                value: Pupkin
-#          - column:
-#                name: is_deleted
-#                value: false
-#          - column:
-#                name: role
-#                value: ROLE_USER
+- changeSet:
+    id: insert_initial_data_in_mood_table
+    author: yury
+    changes:
+    - insert:
+          tableName: mood
+          columns:
+          - column:
+                name: text
+                value: Good
+          - column:
+                name: icon
+                value: check
+    - insert:
+          tableName: mood
+          columns:
+          - column:
+                name: text
+                value: Bad
+          - column:
+                name: icon
+                value: accessibility
+
+- changeSet:
+    id: insert_initial_data_in_location_table
+    author: yury
+    changes:
+    - insert:
+          tableName: location
+          columns:
+          - column:
+                name: name
+                value: kitchen
+    - insert:
+          tableName: location
+          columns:
+          - column:
+                name: name
+                value: bathroom
