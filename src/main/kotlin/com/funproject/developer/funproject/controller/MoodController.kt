@@ -20,14 +20,14 @@ class MoodController @Autowired constructor(
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/add")
+    @PostMapping("/")
     @ResponseStatus(HttpStatus.OK)
     fun addMood(@RequestBody mood: Mood) {
         moodService.addMood(mood)
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping("/edit")
+    @PutMapping("/")
     @ResponseStatus(HttpStatus.OK)
     fun editMood(@RequestBody mood: Mood) {
         moodService.editMood(mood)

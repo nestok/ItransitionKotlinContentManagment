@@ -36,7 +36,7 @@ class StatusReplyController @Autowired constructor(
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    @PostMapping("/add")
+    @PostMapping("/")
     @ResponseStatus(HttpStatus.OK)
     fun addReply(@RequestBody reply: ReplyAddDto) {
         replyService.addReply(reply)

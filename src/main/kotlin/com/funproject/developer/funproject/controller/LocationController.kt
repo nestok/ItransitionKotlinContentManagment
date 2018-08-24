@@ -20,14 +20,14 @@ class LocationController @Autowired constructor(
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/add")
+    @PostMapping("/")
     @ResponseStatus(HttpStatus.OK)
     fun addLocation(@RequestBody location: Location) {
         locationService.addLocation(location)
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping("/edit")
+    @PutMapping("/")
     @ResponseStatus(HttpStatus.OK)
     fun editLocation(@RequestBody location: Location) {
         locationService.editLocation(location)
