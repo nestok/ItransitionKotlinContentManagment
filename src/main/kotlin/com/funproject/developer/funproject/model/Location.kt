@@ -10,6 +10,4 @@ data class Location(
         val name: String = "",
 
         @Id @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Long = -1) {
-
-}
+        val id: Long = -1)

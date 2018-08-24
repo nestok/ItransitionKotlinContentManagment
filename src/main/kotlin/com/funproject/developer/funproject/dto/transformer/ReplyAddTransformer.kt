@@ -17,12 +17,9 @@ class ReplyAddTransformer(
 ) {
 
     fun makeModel(replyAddDto: ReplyAddDto): StatusReply {
-        val user = userRepository.findById(replyAddDto.contributor_id).orElse(null)
-                ?: throw UserNotFoundException("User not found")
-        val mood = moodRepository.findById(replyAddDto.mood_id).orElse(null)
-                ?: throw EntityNotFoundException("Mood not found")
-        val location = locationRepository.findById(replyAddDto.location_id).orElse(null)
-                ?: throw EntityNotFoundException("Location not found")
+        val user = userRepository.findById(replyAddDto.contributor_id).orElse(null) ?: throw UserNotFoundException("User not found")
+        val mood = moodRepository.findById(replyAddDto.mood_id).orElse(null) ?: throw EntityNotFoundException("Mood not found")
+        val location = locationRepository.findById(replyAddDto.location_id).orElse(null) ?: throw EntityNotFoundException("Location not found")
         return StatusReply(user = user, mood = mood, location = location, comment = replyAddDto.comment)
     }
 }

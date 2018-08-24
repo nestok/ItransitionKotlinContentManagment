@@ -43,4 +43,10 @@ class ExceptionController {
         return ResponseEntity(ex.message, HttpStatus.NOT_ACCEPTABLE)
     }
 
+    @ExceptionHandler(EntityUsesInDBException::class)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    fun handleEntityUsesInDBException(ex: EntityUsesInDBException): ResponseEntity<String> {
+        return ResponseEntity(ex.message, HttpStatus.NOT_ACCEPTABLE)
+    }
+
 }

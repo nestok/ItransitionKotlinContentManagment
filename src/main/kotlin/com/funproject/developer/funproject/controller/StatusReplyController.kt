@@ -1,11 +1,7 @@
 package com.funproject.developer.funproject.controller
 
-import com.funproject.developer.funproject.dto.replyDto.ContributorReplyDto
+import com.funproject.developer.funproject.dto.replyDto.ReplyDto
 import com.funproject.developer.funproject.dto.replyDto.ReplyAddDto
-import com.funproject.developer.funproject.dto.userDto.ContributorDto
-import com.funproject.developer.funproject.model.Location
-import com.funproject.developer.funproject.model.Mood
-import com.funproject.developer.funproject.model.StatusReply
 import org.springframework.beans.factory.annotation.Autowired
 import com.funproject.developer.funproject.service.ReplyService
 import org.springframework.http.HttpStatus
@@ -29,13 +25,13 @@ class StatusReplyController @Autowired constructor(
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @GetMapping("/")
-    fun findAllReplies(): ArrayList<ContributorReplyDto> {
+    fun findAllReplies(): ArrayList<ReplyDto> {
         return replyService.findAllReplies()
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @GetMapping("/lastStatuses")
-    fun findTeamStatuses(): ArrayList<ContributorReplyDto> {
+    fun findTeamStatuses(): ArrayList<ReplyDto> {
         return replyService.findTeamStatuses()
     }
 
@@ -52,7 +48,7 @@ class StatusReplyController @Autowired constructor(
         replyService.deleteReply(id)
     }
 
-    @MessageMapping("/send/reply")
+    @MessageMapping("/send")
     fun onRecievedReply() {
         this.template.convertAndSend("/reply", "OK")
     }

@@ -12,6 +12,4 @@ data class Mood(
         val text: String = "",
 
         @Id @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Long = -1) {
-
-}
+        val id: Long = -1)

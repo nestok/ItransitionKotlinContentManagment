@@ -1,10 +1,6 @@
 package com.funproject.developer.funproject.model
 
-import com.fasterxml.jackson.annotation.JsonFormat
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import javax.persistence.*
 
 @Entity
@@ -29,10 +25,5 @@ data class StatusReply(
 
         @Id @GeneratedValue(strategy = GenerationType.AUTO)
         val id: Long = -1) {
-
-//    override fun toString(): String {
-//        return "{location: ${this.location}, mood: ${this.mood}, comment: ${this.comment}," +
-//                " publish_date: ${this.publish_date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))}}"
-//    }
 
 }

@@ -1,7 +1,7 @@
 package com.funproject.developer.funproject.service
 
 import com.funproject.developer.funproject.client.UserManagementClient
-import com.funproject.developer.funproject.dto.replyDto.ContributorReplyDto
+import com.funproject.developer.funproject.dto.replyDto.ReplyDto
 import com.funproject.developer.funproject.dto.replyDto.ReplyAddDto
 import com.funproject.developer.funproject.dto.transformer.ContributorReplyTransformer
 import com.funproject.developer.funproject.dto.transformer.ReplyAddTransformer
@@ -29,14 +29,14 @@ class ReplyService @Autowired constructor(
         private val contributorDtoAccess: ContributorDtoAccess
 ) {
 
-    fun findAllReplies(): ArrayList<ContributorReplyDto> {
+    fun findAllReplies(): ArrayList<ReplyDto> {
         val currentUser = authenticationHelper.getCurrentUser() ?: throw UserNotFoundException("User not found")
         if (currentUser.role == UserRole.ROLE_USER)
             return contributorDtoAccess.findAllNotPersonalCriteria(currentUser.id)
         return contributorReplyTransformer.makeDto(statusReplyRepository.findAll())
     }
 
-    fun findTeamStatuses(): ArrayList<ContributorReplyDto> {
+    fun findTeamStatuses(): ArrayList<ReplyDto> {
         return contributorDtoAccess.findLastContributorReply()
     }
 
@@ -54,8 +54,7 @@ class ReplyService @Autowired constructor(
     }
 
     fun deleteReply(id: Long) {
-        val deletedReply: StatusReply = statusReplyRepository.findById(id).orElse(null)
-                ?: throw EntityNotFoundException("Reply not found")
+        val deletedReply: StatusReply = statusReplyRepository.findById(id).orElse(null) ?: throw EntityNotFoundException("Reply not found")
         statusReplyRepository.delete(deletedReply)
     }
 

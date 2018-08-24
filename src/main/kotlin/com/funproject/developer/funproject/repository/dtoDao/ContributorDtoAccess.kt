@@ -1,6 +1,6 @@
 package com.funproject.developer.funproject.repository.dtoDao
 
-import com.funproject.developer.funproject.dto.replyDto.ContributorReplyDto
+import com.funproject.developer.funproject.dto.replyDto.ReplyDto
 import com.funproject.developer.funproject.dto.transformer.ContributorReplyTransformer
 import com.funproject.developer.funproject.dto.userDto.ContributorDto
 import com.funproject.developer.funproject.model.Location
@@ -10,12 +10,9 @@ import com.funproject.developer.funproject.model.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import javax.persistence.EntityManager
-import org.hibernate.transform.Transformers
 import java.time.LocalDateTime
 import javax.persistence.criteria.*
 import java.util.ArrayList
-
-
 
 
 @Component
@@ -23,14 +20,13 @@ class ContributorDtoAccess @Autowired constructor(
         private val contributorReplyTransformer: ContributorReplyTransformer,
         private val entityManager: EntityManager
 ) {
-    fun findAllNotPersonal(userId: Long): ArrayList<ContributorReplyDto> {
+    fun findAllNotPersonal(userId: Long): ArrayList<ReplyDto> {
         return entityManager.createQuery(
                 "select " +
                         "sr.id as id, " +
                         "sr.comment as comment, " +
                         "sr.publish_date as publish_date, " +
                         "sr.location.name as location_name, " +
-//                        "sr.user.id, " +
                         "sr.user.firstname, " +
                         "sr.user.lastname, " +
                         "sr.mood.text, " +
@@ -40,17 +36,16 @@ class ContributorDtoAccess @Autowired constructor(
                 .setParameter("id", userId)
                 .unwrap( org.hibernate.query.Query::class.java )
                 .setResultTransformer(contributorReplyTransformer)
-                .resultList as ArrayList<ContributorReplyDto>
+                .resultList as ArrayList<ReplyDto>
     }
 
-    fun findLastContributorReply(): ArrayList<ContributorReplyDto> {
+    fun findLastContributorReply(): ArrayList<ReplyDto> {
         return entityManager.createQuery(
                 "select " +
                         "sr.id as id, " +
                         "sr.comment as comment, " +
                         "sr.publish_date as publish_date, " +
                         "sr.location.name as location_name, " +
-//                        "sr.user.id, " +
                         "sr.user.firstname, " +
                         "sr.user.lastname, " +
                         "sr.mood.text as mood_text, " +
@@ -62,25 +57,12 @@ class ContributorDtoAccess @Autowired constructor(
                                 "where sr.user.id = sb.user.id)")
                 .unwrap( org.hibernate.query.Query::class.java )
                 .setResultTransformer(contributorReplyTransformer)
-                .resultList as ArrayList<ContributorReplyDto>
+                .resultList as ArrayList<ReplyDto>
     }
 
-//    fun findContributorWithoutReply(): ArrayList<ContributorDto> {
-//        return entityManager.createQuery(
-//                "select " +
-//                        "id, " +
-//                        "firstname, " +
-//                        "lastname " +
-//                        "from User " +
-//                        "where id not in (SELECT sr.user.id FROM StatusReply sr)")
-//                .unwrap( org.hibernate.query.Query::class.java )
-//                .setResultTransformer(Transformers.aliasToBean(ContributorDto::class.java))
-//                .resultList as ArrayList<ContributorDto>
-//    }
-
-    fun findAllNotPersonalCriteria(userId: Long): ArrayList<ContributorReplyDto> {
+    fun findAllNotPersonalCriteria(userId: Long): ArrayList<ReplyDto> {
         val cb = entityManager.criteriaBuilder
-        val criteriaQuery = cb.createQuery(ContributorReplyDto::class.java)
+        val criteriaQuery = cb.createQuery(ReplyDto::class.java)
         val from = criteriaQuery.from(StatusReply::class.java)
 
         val mood: Join<StatusReply, Mood> = from.join("mood", JoinType.LEFT)
@@ -99,27 +81,9 @@ class ContributorDtoAccess @Autowired constructor(
                 user.get<String>("firstname"),
                 user.get<String>("lastname")
         )
-
-//                cb.construct(
-//                        ReplyDto::class.java,
-//                        from.get<Long>("id"),
-//                        from.get<String>("comment"),
-//                        location.get<String>("name"),
-//                        cb.construct(
-//                                MoodDto::class.java,
-//                                mood.get<String>("text"),
-//                                mood.get<String>("icon")
-//                        )
-//                ),
-//                cb.construct(
-//                        ContributorDto::class.java,
-//                        user.get<Long>("id"),
-//                        user.get<String>("firstname"),
-//                        user.get<String>("lastname")
-//                )
         criteriaQuery.where(cb.and(predicate))
 
-        return entityManager.createQuery(criteriaQuery).resultList as ArrayList<ContributorReplyDto>
+        return entityManager.createQuery(criteriaQuery).resultList as ArrayList<ReplyDto>
     }
 
     fun findContributorWithoutReply(): ArrayList<ContributorDto> {

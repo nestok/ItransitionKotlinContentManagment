@@ -10,8 +10,5 @@ import org.springframework.stereotype.Repository
 interface UserRepository : JpaRepository<User, Long> {
 
 	fun findByUsername(username: String): User?
-    fun findByEmail(email: String): User?
 
-    @Query("SELECT u FROM User u WHERE u.is_deleted = false")
-    fun findAllExisted(): ArrayList<User>
 }

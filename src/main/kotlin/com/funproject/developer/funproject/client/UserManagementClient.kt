@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping
 @FeignClient(value = "clm-user-management-service", path = "user")
 interface UserManagementClient {
 
-    @GetMapping("/loadAllContributors")
+    @GetMapping("/contributors")
     fun findAllContributors(): ArrayList<ContributorDto>
 
 }
