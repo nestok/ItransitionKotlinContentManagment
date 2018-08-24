@@ -20,13 +20,16 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.BDDMockito.given
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.MockitoAnnotations
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
 import org.mockito.MockitoAnnotations.initMocks
 import org.springframework.beans.factory.annotation.Autowired
+import java.util.*
 
 
 @RunWith(SpringRunner::class)
@@ -34,46 +37,29 @@ import org.springframework.beans.factory.annotation.Autowired
 class ReplyServiceTest @Autowired constructor(
 
 ) {
-
-    @Autowired
+    @InjectMocks
+//    @Autowired
     lateinit var replyService: ReplyService
 
-    @Autowired
+    @Mock
+//    @Autowired
     lateinit var statusReplyRepository: StatusReplyRepository
 
-    @Autowired
-    lateinit var locationRepository: LocationRepository
-
-    @Autowired
-    lateinit var moodRepository: MoodRepository
-
-    @Autowired
+    @Mock
+//    @Autowired
     lateinit var userRepository: UserRepository
 
     @Mock
     lateinit var replyAddTransformer: ReplyAddTransformer
 
+    @Mock
+    lateinit var userManagementClient: UserManagementClient
 
-//    @InjectMocks
-//    lateinit var replyService: ReplyService
-//
-//    @Mock
-//    lateinit var statusReplyRepository: StatusReplyRepository
+    @Mock
+    lateinit var contributorReplyTransformer: ContributorReplyTransformer
 
-//    @Mock
-//    lateinit var moodRepository: MoodRepository
-//
-//    @Mock
-//    lateinit var locationRepository: LocationRepository
-//
-//    @Mock
-//    lateinit var userManagementClient: UserManagementClient
-//
-//    @Mock
-//    lateinit var contributorReplyTransformer: ContributorReplyTransformer
-//
-//    @Mock
-//    lateinit var contributorDtoAccess: ContributorDtoAccess
+    @Mock
+    lateinit var contributorDtoAccess: ContributorDtoAccess
 
     @Mock
     lateinit var authenticationHelper: AuthenticationHelper
@@ -82,8 +68,10 @@ class ReplyServiceTest @Autowired constructor(
 
     @Before
     fun setup() {
-        initMocks(this)
+        MockitoAnnotations.initMocks(this)
         user = userRepository.findById(1).orElse(User())
+//        replyService.moodRepository = this.moodRepository
+
     }
 
     private final val ID : Long = 1
@@ -91,17 +79,24 @@ class ReplyServiceTest @Autowired constructor(
     @Test
     fun addReplyAndFindItTest() {
         Mockito.`when`(authenticationHelper.getCurrentUser()).thenReturn(user)
-        val replyAddDto = ReplyAddDto(comment = "asdasd", location_id = 1, mood_id = 1, contributor_id = 1)
+        val replyAddDto = ReplyAddDto(comment = "asdasd", location_id = 1, mood_id = 1, contributor_id = 2)
         replyService.addReply(replyAddDto)
         Mockito.verify(statusReplyRepository).save(replyAddTransformer.makeModel(replyAddDto))
     }
 
-//    @Test
-//    fun findAllRepliesTest() {
-//        val result = replyService.findTeamStatuses()
-//        assertNotNull(result)
-//        verify(statusReplyRepository).findTeamStatuses()
-//    }
+    @Test
+    fun addMoodTest() {
+//        val mood = Mood(id = 1, text = "Good", icon = "super")
+//        replyService.addMood(mood)
+//        Mockito.verify(moodRepository).save(mood)
+    }
 
+
+//    @Test
+//    fun deleteMoodTest() {
+//        Mockito.`when`(moodRepository.findById(ID)).thenReturn(Mood())
+//        replyService.deleteMood(ID)
+//        Mockito.verify(moodRepository).deleteById(ID)
+//    }
 
 }
