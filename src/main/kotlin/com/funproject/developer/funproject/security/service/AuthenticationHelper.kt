@@ -30,8 +30,6 @@ class AuthenticationHelper @Autowired constructor(
 
     private val tokenExpirationTime = 36000000L
 
-//    private val objectMapper: ObjectMapper ? = null
-
     fun generateToken(userId: Long): String {
         try {
             val payload = TokenPayload(

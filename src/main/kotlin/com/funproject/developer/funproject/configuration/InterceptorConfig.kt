@@ -2,9 +2,7 @@ package com.funproject.developer.funproject.configuration
 
 import com.funproject.developer.funproject.security.model.JwtUserDetails
 import com.funproject.developer.funproject.security.service.AuthenticationHelper
-import com.funproject.developer.funproject.security.service.JwtUserDetailsServiceImpl
 import feign.RequestInterceptor
-import feign.RequestTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

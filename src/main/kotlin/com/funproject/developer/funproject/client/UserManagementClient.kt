@@ -5,7 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping
 
 
-@FeignClient(value = "clm-user-management-service", path = "user")
+@FeignClient(value = "user-management-service", path = "user")
 interface UserManagementClient {
 
     @GetMapping("/contributors")

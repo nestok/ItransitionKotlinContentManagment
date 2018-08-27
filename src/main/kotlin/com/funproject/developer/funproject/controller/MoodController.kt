@@ -16,6 +16,7 @@ class MoodController @Autowired constructor(
 ) {
 
     @GetMapping("/")
+    @ResponseStatus(HttpStatus.OK)
     fun findAllMoods(): ArrayList<Mood> {
         return moodService.findAllMoods()
     }

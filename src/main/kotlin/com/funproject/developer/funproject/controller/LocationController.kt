@@ -16,6 +16,7 @@ class LocationController @Autowired constructor(
 ) {
 
     @GetMapping("/")
+    @ResponseStatus(HttpStatus.OK)
     fun findAllLocations(): ArrayList<Location> {
         return locationService.findAllLocations()
     }
