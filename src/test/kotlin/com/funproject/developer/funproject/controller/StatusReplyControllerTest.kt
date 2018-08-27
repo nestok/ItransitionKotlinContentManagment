@@ -1,60 +1,52 @@
 package com.funproject.developer.funproject.controller
 
-import com.funproject.developer.funproject.dto.replyDto.ReplyAddDto
-import com.funproject.developer.funproject.model.StatusReply
-import com.funproject.developer.funproject.model.User
+import com.funproject.developer.funproject.dto.replyDto.ReplyDto
 import com.funproject.developer.funproject.service.ReplyService
-import junit.framework.Assert.assertNotNull
+import com.funproject.developer.funproject.service.ReplyServiceImpl
+import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.InjectMocks
-import org.mockito.Mock
+import org.mockito.ArgumentMatchers.anyLong
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.messaging.simp.SimpMessagingTemplate
-import java.util.*
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.security.test.context.support.WithMockUser
 import kotlin.collections.ArrayList
 
 
 @RunWith(SpringRunner::class)
 @SpringBootTest
-class StatusReplyControllerTest @Autowired constructor(
+class StatusReplyControllerTest {
 
-) {
-    @InjectMocks
+    @Autowired
     lateinit var statusReplyController: StatusReplyController
 
-    @Mock
-    lateinit var template: SimpMessagingTemplate
-
-    @Mock
+    @MockBean
     lateinit var replyService: ReplyService
-
-    @Mock
-    lateinit var reply: StatusReply
-
-    lateinit var user: User
 
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        statusReplyController = StatusReplyController(template, replyService)
     }
 
-    private final val ID : Long = 1
+    @Test
+    @WithMockUser(roles = ["ADMIN", "USER"])
+    fun findAllRepliesTest() {
+        val replyList = ArrayList<ReplyDto>()
+        replyList.add(ReplyDto())
+        Mockito.`when`(replyService.findAllReplies()).thenReturn(replyList)
+        assertEquals(statusReplyController.findAllReplies().size, replyList.size)
+    }
 
     @Test
-    fun findAllRepliesTest() {
-//        val replyList = ArrayList<StatusReply>()
-//        replyList.add()
-//        Mockito.`when`(authenticationHelper.getCurrentUser()).thenReturn(user)
-//        val replyAddDto = ReplyAddDto(comment = "asdasd", location_id = 1, mood_id = 1, contributor_id = 2)
-//        replyService.addReply(replyAddDto)
-//        Mockito.verify(statusReplyRepository).save(replyAddTransformer.makeModel(replyAddDto))
+    @WithMockUser(roles = ["ADMIN"])
+    fun addReplyTest() {
+        Mockito.doNothing().`when`(replyService).deleteReply(anyLong())
+        statusReplyController.deleteReply(1)
     }
 
 }

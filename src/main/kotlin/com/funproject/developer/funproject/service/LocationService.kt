@@ -5,35 +5,19 @@ import com.funproject.developer.funproject.model.exception.EntityNotFoundExcepti
 import com.funproject.developer.funproject.model.exception.EntityUsesInDBException
 import com.funproject.developer.funproject.repository.LocationRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 
-@Service
-@Transactional
-class LocationService @Autowired constructor(
-        private val locationRepository: LocationRepository
-) {
+interface LocationService {
 
-    fun findAllLocations(): ArrayList<Location> {
-        return locationRepository!!.findAll()
-    }
+    fun findAllLocations(): ArrayList<Location>
 
-    fun addLocation(location: Location) {
-        locationRepository.save(location)
-    }
+    fun addLocation(location: Location)
 
-    fun editLocation(location: Location) {
-        locationRepository.save(location)
-    }
+    fun editLocation(location: Location)
 
-    fun deleteLocation(id: Long) {
-        val deletedLocation: Location = locationRepository.findById(id).orElse(null) ?: throw EntityNotFoundException("Location not found")
-        try {
-            locationRepository.delete(deletedLocation)
-        } catch (ex: Exception) {
-            throw EntityUsesInDBException("Location is used in reply")
-        }
-    }
+    fun deleteLocation(id: Long)
 
 }

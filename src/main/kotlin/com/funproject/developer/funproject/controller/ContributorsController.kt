@@ -1,8 +1,8 @@
 package com.funproject.developer.funproject.controller
 
 import com.funproject.developer.funproject.dto.userDto.ContributorDto
-import org.springframework.beans.factory.annotation.Autowired
 import com.funproject.developer.funproject.service.ReplyService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
 @RestController

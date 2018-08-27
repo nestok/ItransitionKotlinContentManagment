@@ -2,6 +2,7 @@ package com.funproject.developer.funproject.controller
 
 import com.funproject.developer.funproject.model.Location
 import com.funproject.developer.funproject.service.LocationService
+import com.funproject.developer.funproject.service.LocationServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.prepost.PreAuthorize

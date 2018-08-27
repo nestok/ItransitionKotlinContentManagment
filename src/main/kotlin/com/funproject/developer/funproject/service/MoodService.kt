@@ -10,31 +10,14 @@ import org.springframework.transaction.annotation.Transactional
 import kotlin.Exception
 
 
-@Service
-@Transactional
-class MoodService @Autowired constructor(
-        private val moodRepository: MoodRepository
-) {
+interface MoodService {
 
-    fun findAllMoods(): ArrayList<Mood> {
-        return moodRepository!!.findAll()
-    }
+    fun findAllMoods(): ArrayList<Mood>
 
-    fun deleteMood(id: Long) {
-        val deletedMood: Mood = moodRepository.findById(id).orElse(null) ?: throw EntityNotFoundException("Mood not found")
-        try{
-            moodRepository.delete(deletedMood)
-        } catch (ex: Exception){
-            throw EntityUsesInDBException("Mood is used in reply")
-        }
-    }
+    fun addMood(mood: Mood)
 
-    fun addMood(mood: Mood) {
-        moodRepository.save(mood)
-    }
+    fun editMood(mood: Mood)
 
-    fun editMood(mood: Mood) {
-        moodRepository.save(mood)
-    }
+    fun deleteMood(id: Long)
 
 }
